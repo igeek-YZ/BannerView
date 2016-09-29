@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BannerViewPager">
+        <attr name="autoPlayInterval" format="integer|reference"/>
+        <attr name="autoPlayAble" format="boolean|reference"/>
+        <attr name="allowTouchScrollable" format="boolean|reference"/>
+    </declare-styleable>
+
+</resources>
