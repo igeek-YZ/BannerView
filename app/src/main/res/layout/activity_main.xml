@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.igeek.bannerview.widget.AspectRatioRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="wrap_content">
 
-    <com.igeek.bannerviewlib.BannerViewPager
-        android:id="@+id/bannerViewPager"
+    <com.igeek.bannerview.widget.AspectRatioRelativeLayout
+        app:aspectRatio="0.5872"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        app:allowTouchScrollable="true"
-        app:autoPlayAble="true"
-        app:autoPlayInterval="2000" />
+        android:layout_height="wrap_content">
 
+        <com.igeek.bannerviewlib.BannerViewPager
+            android:id="@+id/bannerViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:allowTouchScrollable="true"
+            app:autoPlayAble="true"
+            app:autoPlayInterval="3000" />
 
+        <com.igeek.bannerviewlib.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            app:ci_animator="@animator/anim_indicator_scale"
+            app:ci_drawable="@mipmap/dot_selected"
+            app:ci_drawable_unselected="@mipmap/dot_normal"
+            app:ci_gravity="center"
+            app:ci_height="10dp"
+            app:ci_margin="4dp"
+            app:ci_orientation="horizontal"
+            app:ci_width="10dp" />
 
-</com.igeek.bannerview.widget.AspectRatioRelativeLayout>
+    </com.igeek.bannerview.widget.AspectRatioRelativeLayout>
+
+</LinearLayout>

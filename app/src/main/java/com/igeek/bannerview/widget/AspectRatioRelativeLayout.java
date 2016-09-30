@@ -29,12 +29,12 @@ public class AspectRatioRelativeLayout extends RelativeLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if(aspectRatio!=-1){
             int widthSize=MeasureSpec.getSize(widthMeasureSpec);
             heightMeasureSpec=MeasureSpec.makeMeasureSpec((int) (widthSize*aspectRatio),MeasureSpec.EXACTLY);
-            setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
+//            setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
         }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public float getAspectRatio() {

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 
 import com.igeek.bannerview.widget.AspectRatioImageView;
 import com.igeek.bannerviewlib.BannerViewPager;
+import com.igeek.bannerviewlib.CircleIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +16,17 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     BannerViewPager viewPager;
+    CircleIndicator indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        indicator= (CircleIndicator) findViewById(R.id.indicator);
         viewPager= (BannerViewPager) findViewById(R.id.bannerViewPager);
         BannerAdapter adapter=new BannerAdapter(buildReIds());
         viewPager.setAdapter(adapter);
+        indicator.setViewPager(viewPager);
     }
 
     public List<Integer> buildReIds(){

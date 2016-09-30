@@ -23,6 +23,11 @@ public class BannerViewAdapter extends PagerAdapter {
         return viewAdapter==null?0:(mAutoPlayAble ? Integer.MAX_VALUE : viewAdapter.getCount());
     }
 
+
+    public int getViewCount(){
+        return viewAdapter==null?0:viewAdapter.getCount();
+    }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         final int finalPosition = position % viewAdapter.getCount();
