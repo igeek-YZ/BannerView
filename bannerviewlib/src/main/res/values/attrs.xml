@@ -2,12 +2,17 @@
 <resources>
 
     <declare-styleable name="BannerViewPager">
+        <!-- 页面停留的时间 -->
         <attr name="autoPlayInterval" format="integer|reference"/>
+        <!-- 开启自动播放 -->
         <attr name="autoPlayAble" format="boolean|reference"/>
+        <!-- 允许触摸手动滚动 -->
         <attr name="allowTouchScrollable" format="boolean|reference"/>
+        <!-- 页面切换动画的时间 -->
+        <attr name="transitionDuration" format="integer|reference"/>
         <!-- 页面切换的动画效果 -->
-        <attr name="transitionEffect" format="enum">
-            <enum name="default" value="0" />
+        <attr name="transitionAnim" format="enum">
+            <enum name="defaultAnim" value="0" />
             <enum name="alpha" value="1" />
             <enum name="rotate" value="2" />
             <enum name="cube" value="3" />

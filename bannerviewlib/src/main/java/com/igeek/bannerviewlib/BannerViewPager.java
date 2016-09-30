@@ -2,6 +2,7 @@ package com.igeek.bannerviewlib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewCompat;
@@ -19,20 +20,26 @@ import com.igeek.bannerviewlib.transformer.TransitionEffect;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class BannerViewPager extends ViewPager {
+public class BannerViewPager extends ViewPager implements View.OnClickListener{
 
     private static final int VEL_THRESHOLD = 400;
 
     private boolean mAllowTouchScrollable;
     private boolean mAutoPlayAble;
     private int mAutoPlayInterval;
+    private int mTransitionDuration;
     private int mPageScrollPosition;
     private float mPageScrollPositionOffset;
 
     private AutoPlayTask mAutoPlayTask;
     private BannerViewAdapter pagerAdapter;
+
+    private List<onViewsChangedListener> viewsListeners;
+    private onItemClickListener clickListener;
 
     public BannerViewPager(Context context) {
         this(context,null);
@@ -45,11 +52,15 @@ public class BannerViewPager extends ViewPager {
         mAutoPlayAble=ta.getBoolean(R.styleable.BannerViewPager_autoPlayAble,false);
         mAllowTouchScrollable=ta.getBoolean(R.styleable.BannerViewPager_allowTouchScrollable,true);
         mAutoPlayInterval=ta.getInteger(R.styleable.BannerViewPager_autoPlayInterval,3000);
+        mTransitionDuration=ta.getInteger(R.styleable.BannerViewPager_transitionDuration,1000);
+        int ordinal = ta.getInt(R.styleable.BannerViewPager_transitionAnim,TransitionEffect.Default.ordinal());
+        TransitionEffect effect = TransitionEffect.values()[ordinal];
         ta.recycle();
 
         mAutoPlayTask = new AutoPlayTask(this);
         setOverScrollMode(ScrollView.OVER_SCROLL_NEVER);
         setOffscreenPageLimit(1);
+        setPageChangeDuration(mTransitionDuration);
         addOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -63,7 +74,8 @@ public class BannerViewPager extends ViewPager {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        setTransitionEffect(TransitionEffect.Default);
+        setTransitionEffect(effect);
+        setOnClickListener(this);
     }
 
     @Override
@@ -265,17 +277,39 @@ public class BannerViewPager extends ViewPager {
         setCurrentItem(getCurrentItem() + 1);
     }
 
+    /** 这里设置适配器 */
     public void setAdapter(BaseAdapter adapter) {
         if(pagerAdapter==null){
             pagerAdapter=new BannerViewAdapter(mAutoPlayAble);
         }
+        adapter.registerDataSetObserver(dataSetObserver);
         pagerAdapter.setViewAdapter(adapter);
         super.setAdapter(pagerAdapter);
     }
 
     @Override
+    public void onClick(View v) {
+        if(clickListener!=null){
+            if(pagerAdapter!=null&&pagerAdapter.getViewCount()>0)
+                clickListener.onItemClick(this,getCurrentItem()/pagerAdapter.getViewCount());
+        }
+    }
+
+    @Override
     public void setAdapter(PagerAdapter adapter) {
         new IllegalAccessError("please call setAdapter(BaseAdapter) method");
+    }
+
+    public void setClickListener(onItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public void addViewsChangedListener(onViewsChangedListener listener) {
+        if(listener==null) return ;
+        if(viewsListeners==null){
+            viewsListeners=new ArrayList<>();
+        }
+        this.viewsListeners.add(listener);
     }
 
     static class AutoPlayTask implements Runnable {
@@ -314,4 +348,31 @@ public class BannerViewPager extends ViewPager {
             super.startScroll(startX, startY, dx, dy, mDuration);
         }
     }
+
+    static interface onViewsChangedListener{
+        void onViewsChanged(BannerViewPager viewPager,int NewCount);
+    }
+
+    static interface onItemClickListener{
+        void onItemClick(BannerViewPager viewPager,int postion);
+    }
+
+    final DataSetObserver dataSetObserver=new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            if(pagerAdapter!=null){
+                pagerAdapter.notifyDataSetChanged();
+                for(onViewsChangedListener listener:viewsListeners){
+                    if(listener!=null){
+                        listener.onViewsChanged(BannerViewPager.this,pagerAdapter.getViewCount());
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onInvalidated() {
+            super.onInvalidated();
+        }
+    };
 }

@@ -15,13 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
+            app:transitionAnim="accordion"
             app:allowTouchScrollable="true"
             app:autoPlayAble="true"
             app:autoPlayInterval="3000" />
 
         <com.igeek.bannerviewlib.CircleIndicator
+            android:background="@android:color/holo_red_dark"
             android:id="@+id/indicator"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             app:ci_animator="@animator/anim_indicator_scale"
