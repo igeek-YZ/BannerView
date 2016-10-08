@@ -32,8 +32,8 @@ public class MainActivity extends Activity {
     public List<Integer> buildReIds(){
         List<Integer> reIds=new ArrayList<Integer>();
         reIds.add(R.mipmap.ic_test1);
-        reIds.add(R.mipmap.ic_test2);
         reIds.add(R.mipmap.ic_test3);
+        reIds.add(R.mipmap.ic_test2);
         return reIds;
     }
 

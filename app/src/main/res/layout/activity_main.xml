@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            app:transitionAnim="accordion"
+            app:transitionAnim="defaultAnim"
             app:allowTouchScrollable="true"
             app:autoPlayAble="true"
             app:autoPlayInterval="3000" />
@@ -30,10 +30,10 @@
             app:ci_drawable="@mipmap/dot_selected"
             app:ci_drawable_unselected="@mipmap/dot_normal"
             app:ci_gravity="center"
-            app:ci_height="10dp"
+            app:ci_height="8dp"
             app:ci_margin="4dp"
             app:ci_orientation="horizontal"
-            app:ci_width="10dp" />
+            app:ci_width="8dp" />
 
     </com.igeek.bannerview.widget.AspectRatioRelativeLayout>
 
