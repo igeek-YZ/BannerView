@@ -21,6 +21,7 @@
             app:autoPlayInterval="3000" />
 
         <com.igeek.bannerviewlib.CircleIndicator
+            app:ci_animator_reverse="@animator/anim_indicator_normal"
             android:background="@android:color/holo_red_dark"
             android:id="@+id/indicator"
             android:layout_width="match_parent"

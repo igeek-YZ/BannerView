@@ -5,13 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BannerViewAdapter extends PagerAdapter {
 
     private BaseAdapter viewAdapter;
     private boolean mAutoPlayAble;
+    private View.OnClickListener clickListener;
+    private List<View> views=new ArrayList<>();
 
-    public BannerViewAdapter(boolean mAutoPlayAble) {
+    public BannerViewAdapter(boolean mAutoPlayAble, View.OnClickListener clickListener) {
         this.mAutoPlayAble = mAutoPlayAble;
+        this.clickListener = clickListener;
     }
 
     public void setViewAdapter(BaseAdapter viewAdapter) {
@@ -34,8 +40,22 @@ public class BannerViewAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+//        Logger.i("child Count="+container.getChildCount()+" cur position="+position);
         final int finalPosition = position % viewAdapter.getCount();
-        View view=viewAdapter.getView(finalPosition,null,container);
+        View view=null;
+        if(position<viewAdapter.getCount()){
+            view=viewAdapter.getView(finalPosition,null,container);
+            views.add(view);
+        }else{
+            view=views.get(finalPosition);
+        }
+
+        if(view.getParent()!=null)
+            ((ViewGroup)view.getParent()).removeView(view);
+
+        if(clickListener!=null)
+            view.setOnClickListener(clickListener);
+
         container.addView(view);
         return view;
     }

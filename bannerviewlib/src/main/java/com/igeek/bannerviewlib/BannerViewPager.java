@@ -39,7 +39,7 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     private BannerViewAdapter pagerAdapter;
 
     private List<onViewsChangedListener> viewsListeners;
-    private onItemClickListener clickListener;
+    private OnBannerClickListener bannerClickListener;
 
     public BannerViewPager(Context context) {
         this(context,null);
@@ -75,13 +75,15 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
             }
         });
         setTransitionEffect(effect);
-        setOnClickListener(this);
     }
 
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         if (visibility == VISIBLE) {
+            boolean canPlay=pagerAdapter!=null&&pagerAdapter.getViewCount()>1;
+            setAutoPlayAble(canPlay);
+            setAllowTouchScrollable(canPlay);
             startAutoPlay();
         } else if (visibility == INVISIBLE) {
             stopAutoPlay();
@@ -280,7 +282,7 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     /** 这里设置适配器 */
     public void setAdapter(BaseAdapter adapter) {
         if(pagerAdapter==null){
-            pagerAdapter=new BannerViewAdapter(mAutoPlayAble);
+            pagerAdapter=new BannerViewAdapter(mAutoPlayAble,this);
         }
         adapter.registerDataSetObserver(dataSetObserver);
         pagerAdapter.setViewAdapter(adapter);
@@ -289,9 +291,10 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if(clickListener!=null){
-            if(pagerAdapter!=null&&pagerAdapter.getViewCount()>0)
-                clickListener.onItemClick(this,getCurrentItem()/pagerAdapter.getViewCount());
+        if(bannerClickListener!=null){
+            if(pagerAdapter!=null&&pagerAdapter.getViewCount()>0){
+                bannerClickListener.onBannerClick(this,getCurrentItem()%pagerAdapter.getViewCount());
+            }
         }
     }
 
@@ -300,8 +303,8 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         new IllegalAccessError("please call setAdapter(BaseAdapter) method");
     }
 
-    public void setClickListener(onItemClickListener clickListener) {
-        this.clickListener = clickListener;
+    public void setOnBannerClickListener(OnBannerClickListener clickListener) {
+        this.bannerClickListener = clickListener;
     }
 
     public void addViewsChangedListener(onViewsChangedListener listener) {
@@ -353,8 +356,8 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         void onViewsChanged(BannerViewPager viewPager,int NewCount);
     }
 
-    static interface onItemClickListener{
-        void onItemClick(BannerViewPager viewPager,int postion);
+    public static interface OnBannerClickListener{
+        void onBannerClick(View v,int postion);
     }
 
     final DataSetObserver dataSetObserver=new DataSetObserver() {

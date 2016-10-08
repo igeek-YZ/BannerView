@@ -258,7 +258,7 @@ public class CircleIndicator extends LinearLayout {
         if(mViewpager.getAdapter() instanceof BannerViewAdapter){
             BannerViewAdapter adapter= (BannerViewAdapter) mViewpager.getAdapter();
             int count = adapter.getViewCount();
-            if (count <= 0) return;
+            if (count <= 1) return;
             int currentItem = mViewpager.getCurrentItem()%count;
             for (int i = 0; i < count; i++) {
                 if (currentItem == i) {

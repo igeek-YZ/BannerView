@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.igeek.bannerview.widget.AspectRatioImageView;
 import com.igeek.bannerviewlib.BannerViewPager;
@@ -26,6 +27,12 @@ public class MainActivity extends Activity {
         viewPager= (BannerViewPager) findViewById(R.id.bannerViewPager);
         BannerAdapter adapter=new BannerAdapter(buildReIds());
         viewPager.setAdapter(adapter);
+        viewPager.setOnBannerClickListener(new BannerViewPager.OnBannerClickListener() {
+            @Override
+            public void onBannerClick(View v, int postion) {
+                Toast.makeText(MainActivity.this,"postion="+postion,Toast.LENGTH_SHORT).show();
+            }
+        });
         indicator.setViewPager(viewPager);
     }
 
@@ -33,7 +40,7 @@ public class MainActivity extends Activity {
         List<Integer> reIds=new ArrayList<Integer>();
         reIds.add(R.mipmap.ic_test1);
         reIds.add(R.mipmap.ic_test3);
-        reIds.add(R.mipmap.ic_test2);
+//        reIds.add(R.mipmap.ic_test2);
         return reIds;
     }
 
@@ -61,7 +68,7 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, final ViewGroup viewGroup) {
             if(view==null){
                 view= View.inflate(viewGroup.getContext(),R.layout.layout_item,null);
             }
