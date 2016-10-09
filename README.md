@@ -63,7 +63,7 @@ xml:
 #### 效果图:
 稍等奉上，也可以运行此工程
 
-<img src="https://github.com/igeek-YZ/BannerView/blob/master/pics/bannerview.gif" width = "335" height = "559" alt="335" align=center />
+<img src="https://github.com/igeek-YZ/BannerView/blob/master/pic/bannerview.gif" width = "335" height = "559" alt="335" align=center />
 
 #### 属性说明:
     <declare-styleable name="BannerViewPager">
