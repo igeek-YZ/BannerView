@@ -48,12 +48,12 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     public BannerViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray ta=context.obtainStyledAttributes(attrs,R.styleable.BannerViewPager);
+        TypedArray ta=context.obtainStyledAttributes(attrs, R.styleable.BannerViewPager);
         mAutoPlayAble=ta.getBoolean(R.styleable.BannerViewPager_autoPlayAble,false);
         mAllowTouchScrollable=ta.getBoolean(R.styleable.BannerViewPager_allowTouchScrollable,true);
         mAutoPlayInterval=ta.getInteger(R.styleable.BannerViewPager_autoPlayInterval,3000);
         mTransitionDuration=ta.getInteger(R.styleable.BannerViewPager_transitionDuration,1000);
-        int ordinal = ta.getInt(R.styleable.BannerViewPager_transitionAnim,TransitionEffect.Default.ordinal());
+        int ordinal = ta.getInt(R.styleable.BannerViewPager_transitionAnim, TransitionEffect.Default.ordinal());
         TransitionEffect effect = TransitionEffect.values()[ordinal];
         ta.recycle();
 
@@ -353,11 +353,11 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     }
 
     static interface onViewsChangedListener{
-        void onViewsChanged(BannerViewPager viewPager,int NewCount);
+        void onViewsChanged(BannerViewPager viewPager, int NewCount);
     }
 
     public static interface OnBannerClickListener{
-        void onBannerClick(View v,int postion);
+        void onBannerClick(View v, int postion);
     }
 
     final DataSetObserver dataSetObserver=new DataSetObserver() {
@@ -365,9 +365,11 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         public void onChanged() {
             if(pagerAdapter!=null){
                 pagerAdapter.notifyDataSetChanged();
-                for(onViewsChangedListener listener:viewsListeners){
-                    if(listener!=null){
-                        listener.onViewsChanged(BannerViewPager.this,pagerAdapter.getViewCount());
+                if(viewsListeners!=null){
+                    for(onViewsChangedListener listener:viewsListeners){
+                        if(listener!=null){
+                            listener.onViewsChanged(BannerViewPager.this,pagerAdapter.getViewCount());
+                        }
                     }
                 }
             }

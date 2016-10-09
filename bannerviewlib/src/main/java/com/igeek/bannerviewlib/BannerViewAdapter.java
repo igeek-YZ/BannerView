@@ -30,7 +30,7 @@ public class BannerViewAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return viewAdapter==null?0:(mAutoPlayAble ? Integer.MAX_VALUE : viewAdapter.getCount());
+        return viewAdapter==null||viewAdapter.getCount()==0?0:(mAutoPlayAble ? Integer.MAX_VALUE : viewAdapter.getCount());
     }
 
 
@@ -40,7 +40,6 @@ public class BannerViewAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-//        Logger.i("child Count="+container.getChildCount()+" cur position="+position);
         final int finalPosition = position % viewAdapter.getCount();
         View view=null;
         if(position<viewAdapter.getCount()){

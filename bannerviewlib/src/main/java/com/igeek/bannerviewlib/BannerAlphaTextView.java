@@ -55,7 +55,7 @@ public class BannerAlphaTextView extends TextView implements ViewPager.OnPageCha
 
     @Override
     public void onViewsChanged(BannerViewPager viewPager, int NewCount) {
-        if(tipTexts!=null){
+        if(tipTexts!=null&&NewCount>0){
             int postion=viewPager.getCurrentItem()/NewCount;
             setText(tipTexts.get(postion));
         }

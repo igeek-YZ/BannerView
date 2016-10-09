@@ -164,6 +164,7 @@ public class CircleIndicator extends LinearLayout {
         if (mViewpager != null && mViewpager.getAdapter() != null) {
             mLastPosition = -1;
             createIndicators();
+            mViewpager.getAdapter().registerDataSetObserver(mInternalDataSetObserver);
             mViewpager.removeOnPageChangeListener(mInternalPageChangeListener);
             mViewpager.addOnPageChangeListener(mInternalPageChangeListener);
             mInternalPageChangeListener.onPageSelected(mViewpager.getCurrentItem());
@@ -184,6 +185,8 @@ public class CircleIndicator extends LinearLayout {
 
             BannerViewAdapter adapter= (BannerViewAdapter) mViewpager.getAdapter();
             int count = adapter.getViewCount();
+
+            if(count==0) return ;
 
             if (mAnimatorIn.isRunning()) {
                 mAnimatorIn.end();
