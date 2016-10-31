@@ -40,9 +40,10 @@ public class BannerViewAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        final int finalPosition = position % viewAdapter.getCount();
+        final int viewCount=viewAdapter.getCount();
+        final int finalPosition = viewCount==0?0:position % viewCount;
         View view=null;
-        if(position<viewAdapter.getCount()){
+        if(position<viewCount||finalPosition>=views.size()){
             view=viewAdapter.getView(finalPosition,null,container);
             views.add(view);
         }else{

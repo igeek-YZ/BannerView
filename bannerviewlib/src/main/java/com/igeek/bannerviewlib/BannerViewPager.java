@@ -26,15 +26,21 @@ import java.util.List;
 
 public class BannerViewPager extends ViewPager implements View.OnClickListener{
 
+    public String TAG=BannerViewPager.class.getSimpleName();
     private static final int VEL_THRESHOLD = 400;
-
+    //是否允许手指触摸滚动
     private boolean mAllowTouchScrollable;
+    //是否允许轮询播放
     private boolean mAutoPlayAble;
+    //轮询播放的间隔时间
     private int mAutoPlayInterval;
+    //轮询转场动画的时间
     private int mTransitionDuration;
+    //滚动的目标位置
     private int mPageScrollPosition;
+    //当前显示位置滚动的偏移量
     private float mPageScrollPositionOffset;
-
+    //轮询任务
     private AutoPlayTask mAutoPlayTask;
     private BannerViewAdapter pagerAdapter;
 
@@ -78,19 +84,6 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     }
 
     @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
-        super.onVisibilityChanged(changedView, visibility);
-        if (visibility == VISIBLE) {
-            boolean canPlay=pagerAdapter!=null&&pagerAdapter.getViewCount()>1;
-            setAutoPlayAble(canPlay);
-            setAllowTouchScrollable(canPlay);
-            startAutoPlay();
-        } else if (visibility == INVISIBLE) {
-            stopAutoPlay();
-        }
-    }
-
-    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (mAllowTouchScrollable) {
             return super.onInterceptTouchEvent(ev);
@@ -129,16 +122,12 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        stopAutoPlay();
-    }
-
     /** 开始轮播 */
     public void startAutoPlay() {
         stopAutoPlay();
-        if (mAutoPlayAble) {
+        boolean mPlayAble =pagerAdapter!=null&&pagerAdapter.getViewCount()>1;
+        setAllowTouchScrollable(mPlayAble);
+        if (mPlayAble &&mAutoPlayAble) {
             postDelayed(mAutoPlayTask, mAutoPlayInterval);
         }
     }
@@ -284,7 +273,10 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         if(pagerAdapter==null){
             pagerAdapter=new BannerViewAdapter(mAutoPlayAble,this);
         }
-        adapter.registerDataSetObserver(dataSetObserver);
+        try {
+            adapter.registerDataSetObserver(dataSetObserver);
+        }catch (Exception e){
+        }
         pagerAdapter.setViewAdapter(adapter);
         super.setAdapter(pagerAdapter);
     }
@@ -380,4 +372,8 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
             super.onInvalidated();
         }
     };
+
+    public void setTAG(String TAG) {
+        this.TAG = TAG;
+    }
 }
