@@ -20,8 +20,6 @@ import com.igeek.bannerviewlib.transformer.TransitionEffect;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class BannerViewPager extends ViewPager implements View.OnClickListener{
@@ -44,7 +42,6 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
     private AutoPlayTask mAutoPlayTask;
     private BannerViewAdapter pagerAdapter;
 
-    private List<onViewsChangedListener> viewsListeners;
     private OnBannerClickListener bannerClickListener;
 
     public BannerViewPager(Context context) {
@@ -124,10 +121,16 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
 
     /** 开始轮播 */
     public void startAutoPlay() {
+        startAutoPlay(getCurrentItem());
+    }
+
+    /** 开始轮播 */
+    private void startAutoPlay(int item) {
         stopAutoPlay();
         boolean mPlayAble =pagerAdapter!=null&&pagerAdapter.getViewCount()>1;
         setAllowTouchScrollable(mPlayAble);
-        if (mPlayAble &&mAutoPlayAble) {
+        if(mPlayAble &&mAutoPlayAble){
+            setCurrentItem(item);
             postDelayed(mAutoPlayTask, mAutoPlayInterval);
         }
     }
@@ -263,11 +266,6 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         mAutoPlayInterval = autoPlayInterval;
     }
 
-    /** 切换到下一页 */
-    private void switchToNextPage() {
-        setCurrentItem(getCurrentItem() + 1);
-    }
-
     /** 这里设置适配器 */
     public void setAdapter(BaseAdapter adapter) {
         if(pagerAdapter==null){
@@ -275,9 +273,9 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         }
         try {
             adapter.registerDataSetObserver(dataSetObserver);
+            pagerAdapter.setViewAdapter(adapter);
         }catch (Exception e){
         }
-        pagerAdapter.setViewAdapter(adapter);
         super.setAdapter(pagerAdapter);
     }
 
@@ -299,14 +297,6 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         this.bannerClickListener = clickListener;
     }
 
-    public void addViewsChangedListener(onViewsChangedListener listener) {
-        if(listener==null) return ;
-        if(viewsListeners==null){
-            viewsListeners=new ArrayList<>();
-        }
-        this.viewsListeners.add(listener);
-    }
-
     static class AutoPlayTask implements Runnable {
 
         private final WeakReference<BannerViewPager> mBanner;
@@ -318,9 +308,8 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         @Override
         public void run() {
             BannerViewPager banner = mBanner.get();
-            if (banner != null) {
-                banner.switchToNextPage();
-                banner.startAutoPlay();
+            if (banner != null&&banner.getCurrentItem()<banner.getAdapter().getCount()-1) {
+                banner.startAutoPlay(banner.getCurrentItem()+1);
             }
         }
     }
@@ -344,10 +333,6 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         }
     }
 
-    static interface onViewsChangedListener{
-        void onViewsChanged(BannerViewPager viewPager, int NewCount);
-    }
-
     public static interface OnBannerClickListener{
         void onBannerClick(View v, int postion);
     }
@@ -356,14 +341,10 @@ public class BannerViewPager extends ViewPager implements View.OnClickListener{
         @Override
         public void onChanged() {
             if(pagerAdapter!=null){
+                stopAutoPlay();
+                removeAllViews();
                 pagerAdapter.notifyDataSetChanged();
-                if(viewsListeners!=null){
-                    for(onViewsChangedListener listener:viewsListeners){
-                        if(listener!=null){
-                            listener.onViewsChanged(BannerViewPager.this,pagerAdapter.getViewCount());
-                        }
-                    }
-                }
+                startAutoPlay();
             }
         }
 

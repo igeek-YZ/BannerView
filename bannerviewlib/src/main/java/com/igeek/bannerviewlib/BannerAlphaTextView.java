@@ -1,6 +1,7 @@
 package com.igeek.bannerviewlib;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import com.nineoldandroids.view.ViewHelper;
 
 import java.util.List;
 
-public class BannerAlphaTextView extends TextView implements ViewPager.OnPageChangeListener,BannerViewPager.onViewsChangedListener{
+public class BannerAlphaTextView extends TextView implements ViewPager.OnPageChangeListener{
 
     private BannerViewPager viewPager;
     private List<String> tipTexts;
@@ -28,9 +29,15 @@ public class BannerAlphaTextView extends TextView implements ViewPager.OnPageCha
 
     public void setViewPager(BannerViewPager viewPager) {
         if(viewPager!=null){
-            this.viewPager = viewPager;
-            this.viewPager.addOnPageChangeListener(this);
-            this.viewPager.addViewsChangedListener(this);
+            try {
+                this.viewPager = viewPager;
+                this.viewPager.removeOnPageChangeListener(this);
+                this.viewPager.addOnPageChangeListener(this);
+                if(this.viewPager.getAdapter()!=null){
+                    this.viewPager.getAdapter().registerDataSetObserver(dataSetObserver);
+                }
+            }catch (Exception e){
+            }
         }
     }
 
@@ -53,15 +60,17 @@ public class BannerAlphaTextView extends TextView implements ViewPager.OnPageCha
     public void onPageScrollStateChanged(int state) {
     }
 
-    @Override
-    public void onViewsChanged(BannerViewPager viewPager, int NewCount) {
-        if(tipTexts!=null&&NewCount>0){
-            int postion=viewPager.getCurrentItem()/NewCount;
-            setText(tipTexts.get(postion));
-        }
-    }
-
     public void setTipTexts(List<String> tipTexts) {
         this.tipTexts = tipTexts;
     }
+
+    DataSetObserver dataSetObserver=new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            if(viewPager!=null&&tipTexts!=null){
+                int postion=viewPager.getCurrentItem()/tipTexts.size();
+                setText(tipTexts.get(postion));
+            }
+        }
+    };
 }

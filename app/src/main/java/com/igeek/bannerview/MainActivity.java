@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
 
     BannerViewPager viewPager;
     CircleIndicator indicator;
+    BannerAdapter adapter;
     BannerViewPager viewPager2;
     CircleIndicator indicator2;
 
@@ -27,7 +28,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         indicator= (CircleIndicator) findViewById(R.id.indicator);
         viewPager= (BannerViewPager) findViewById(R.id.bannerViewPager);
-        viewPager.setAdapter(new BannerAdapter(buildReIds()));
+        adapter=new BannerAdapter(buildReIds());
+        viewPager.setAdapter(adapter);
         indicator.setViewPager(viewPager);
         viewPager.setOnBannerClickListener(new BannerViewPager.OnBannerClickListener() {
             @Override
@@ -46,6 +48,8 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this,"postion="+postion,Toast.LENGTH_SHORT).show();
             }
         });
+        viewPager.startAutoPlay();
+        viewPager2.startAutoPlay();
     }
 
     public List<Integer> buildReIds(){
@@ -56,11 +60,28 @@ public class MainActivity extends Activity {
         return reIds;
     }
 
+    public List<Integer> buildReIds2(){
+        List<Integer> reIds=new ArrayList<Integer>();
+        reIds.add(R.mipmap.all);
+        reIds.add(R.mipmap.cart);
+        reIds.add(R.mipmap.comments);
+        reIds.add(R.mipmap.category);
+        return reIds;
+    }
+
     static class BannerAdapter extends BaseAdapter {
 
         List<Integer> reIds=new ArrayList<Integer>();
 
         public BannerAdapter(List<Integer> reIds) {
+            this.reIds = reIds;
+        }
+
+        public List<Integer> getReIds() {
+            return reIds;
+        }
+
+        public void setReIds(List<Integer> reIds) {
             this.reIds = reIds;
         }
 

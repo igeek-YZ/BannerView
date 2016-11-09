@@ -10,6 +10,7 @@ import java.util.List;
 
 public class BannerViewAdapter extends PagerAdapter {
 
+    private static final String TAG=BannerViewAdapter.class.getSimpleName();
     private BaseAdapter viewAdapter;
     private boolean mAutoPlayAble;
     private View.OnClickListener clickListener;
@@ -73,5 +74,11 @@ public class BannerViewAdapter extends PagerAdapter {
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        views.clear();
+        super.notifyDataSetChanged();
     }
 }

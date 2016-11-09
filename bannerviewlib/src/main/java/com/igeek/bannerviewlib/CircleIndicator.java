@@ -164,10 +164,13 @@ public class CircleIndicator extends LinearLayout {
         if (mViewpager != null && mViewpager.getAdapter() != null) {
             mLastPosition = -1;
             createIndicators();
-            mViewpager.getAdapter().registerDataSetObserver(mInternalDataSetObserver);
-            mViewpager.removeOnPageChangeListener(mInternalPageChangeListener);
-            mViewpager.addOnPageChangeListener(mInternalPageChangeListener);
-            mInternalPageChangeListener.onPageSelected(mViewpager.getCurrentItem());
+            try {
+                mViewpager.removeOnPageChangeListener(mInternalPageChangeListener);
+                mViewpager.addOnPageChangeListener(mInternalPageChangeListener);
+                mViewpager.getAdapter().registerDataSetObserver(mInternalDataSetObserver);
+                mInternalPageChangeListener.onPageSelected(mViewpager.getCurrentItem());
+            }catch (Exception e){
+            }
         }
     }
 
@@ -218,10 +221,6 @@ public class CircleIndicator extends LinearLayout {
         }
     };
 
-    public DataSetObserver getDataSetObserver() {
-        return mInternalDataSetObserver;
-    }
-
     private DataSetObserver mInternalDataSetObserver = new DataSetObserver() {
         @Override public void onChanged() {
             super.onChanged();
@@ -232,14 +231,7 @@ public class CircleIndicator extends LinearLayout {
 
             BannerViewAdapter adapter= (BannerViewAdapter) mViewpager.getAdapter();
             int newCount = adapter.getViewCount();
-            int currentCount = getChildCount();
-            if (newCount == currentCount) {  // No change
-                return;
-            } else if (mLastPosition < newCount) {
-                mLastPosition = mViewpager.getCurrentItem()%newCount;
-            } else {
-                mLastPosition = -1;
-            }
+            mLastPosition = mViewpager.getCurrentItem()%newCount;
 
             createIndicators();
         }
