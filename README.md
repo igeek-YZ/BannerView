@@ -7,6 +7,11 @@
 ##### AspectRatioRelativeLayout 和 AspectRatioImageView
 AspectRatio_XXX 可以依据宽度按照比列设置视图的高度
 
+#### 效果图:
+
+<img src="https://github.com/igeek-YZ/BannerView/blob/master/pic/bannerview.gif" width = "335" height = "559" alt="335" align=center />
+
+
 activity:
 
     @Override
@@ -85,10 +90,6 @@ xml:
 
     </com.igeek.bannerview.widget.AspectRatioRelativeLayout>
 
-
-#### 效果图:
-
-<img src="https://github.com/igeek-YZ/BannerView/blob/master/pic/bannerview.gif" width = "335" height = "559" alt="335" align=center />
 
 #### 属性说明:
     <declare-styleable name="BannerViewPager">
