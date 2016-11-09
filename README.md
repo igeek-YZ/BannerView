@@ -60,8 +60,33 @@ xml:
     </com.igeek.bannerview.widget.AspectRatioRelativeLayout>
 
 
+    static class BannerAdapter extends BaseAdapter {
+
+            List<Integer> reIds=new ArrayList<Integer>();
+
+            public BannerAdapter(List<Integer> reIds) {
+                this.reIds = reIds;
+            }
+
+            @Override
+            public int getCount() {
+                return reIds.size();
+            }
+
+            @Override
+            public View getView(final int i, View view, final ViewGroup viewGroup) {
+                if(view==null){
+                    view= View.inflate(viewGroup.getContext(),R.layout.layout_item,null);
+                }
+
+                AspectRatioImageView img= (AspectRatioImageView) view.findViewById(R.id.coverImg);
+                img.setImageResource(reIds.get(i));
+
+                return view;
+            }
+    }
+
 #### 效果图:
-稍等奉上，也可以运行此工程
 
 <img src="https://github.com/igeek-YZ/BannerView/blob/master/pic/bannerview.gif" width = "335" height = "559" alt="335" align=center />
 
