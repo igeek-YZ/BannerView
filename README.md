@@ -25,6 +25,32 @@ activity:
         });
     }
 
+    static class BannerAdapter extends BaseAdapter {
+
+                List<Integer> reIds=new ArrayList<Integer>();
+
+                public BannerAdapter(List<Integer> reIds) {
+                    this.reIds = reIds;
+                }
+
+                @Override
+                public int getCount() {
+                    return reIds.size();
+                }
+
+                @Override
+                public View getView(final int i, View view, final ViewGroup viewGroup) {
+                    if(view==null){
+                        view= View.inflate(viewGroup.getContext(),R.layout.layout_item,null);
+                    }
+
+                    AspectRatioImageView img= (AspectRatioImageView) view.findViewById(R.id.coverImg);
+                    img.setImageResource(reIds.get(i));
+
+                    return view;
+                }
+    }
+
 xml:
 
     <com.igeek.bannerview.widget.AspectRatioRelativeLayout
@@ -59,32 +85,6 @@ xml:
 
     </com.igeek.bannerview.widget.AspectRatioRelativeLayout>
 
-
-    static class BannerAdapter extends BaseAdapter {
-
-            List<Integer> reIds=new ArrayList<Integer>();
-
-            public BannerAdapter(List<Integer> reIds) {
-                this.reIds = reIds;
-            }
-
-            @Override
-            public int getCount() {
-                return reIds.size();
-            }
-
-            @Override
-            public View getView(final int i, View view, final ViewGroup viewGroup) {
-                if(view==null){
-                    view= View.inflate(viewGroup.getContext(),R.layout.layout_item,null);
-                }
-
-                AspectRatioImageView img= (AspectRatioImageView) view.findViewById(R.id.coverImg);
-                img.setImageResource(reIds.get(i));
-
-                return view;
-            }
-    }
 
 #### 效果图:
 
